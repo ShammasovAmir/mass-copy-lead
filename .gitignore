@@ -1,0 +1,7 @@
+.idea
+vendor/
+cache/
+logs/
+.env
+*.txt
+src/Config.php

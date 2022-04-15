@@ -1,0 +1,10 @@
+{
+  "widget": {
+    "name": "Mass creation leads",
+    "short_description": "short descript",
+    "description": "Description:\nThe widget allows you to bulk create copies of current leads.\nIt is possible to specify the person responsible for these leads, tags, select the funnel and stage in which the leads will be created.\n\nInstruction:\nOpen the Leads section.\nSelect the leads you want to copy.\nClick on the \"Create Leads\" button in the \"More\"(...) section.\nIn the window that appears, select the responsible manager, funnel and stage, add tags, and also specify a prefix for the name of new leads."
+  },
+  "settings": {
+    "system_field": "Settings"
+  }
+}

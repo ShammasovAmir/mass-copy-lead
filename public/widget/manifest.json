@@ -1,0 +1,29 @@
+{
+  "widget": {
+    "name": "widget.name",
+    "description": "widget.description",
+    "short_description": "widget.short_description",
+    "version": "1.0.0",
+    "interface_version": 2,
+    "init_once": false,
+    "locale": [
+      "en"
+    ],
+    "installation": true
+  },
+  "locations": [
+    "lcard",
+    "ccard",
+    "comcard",
+    "llist",
+    "clist",
+    "everywhere"
+  ],
+  "settings": {
+    "system_field": {
+      "name": "settings.system_field",
+      "type": "text",
+      "required": false
+    }
+  }
+}

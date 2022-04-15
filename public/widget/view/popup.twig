@@ -1,0 +1,113 @@
+<div class="copy-many-leads-modal copy-many-leads-modal--visible">
+  <div class="copy-many-leads-modal__container">
+    <div class="copy-many-leads-modal__header">
+      <div class="copy-many-leads-modal__close-btn">
+        <span class="copy-many-leads-modal__icon copy-many-leads-modal__icon-close"></span>
+      </div>
+    </div>
+    <div class="copy-many-leads-modal__body">
+      <form id="copy_many_leads_form" action="">
+        <div class="copy-many-leads-modal__form-group" id="__manager-form-group">
+          <label class="copy-many-leads-modal__form-group-label" for="manager">Responsible <span class="copy-many-leads-modal__error">Not selected</span></label>
+          <div class="copy-many-leads-modal__select-box" id="manager-select-box">
+            <ul class="copy-many-leads-modal__options-container">
+              {% for user in users %}
+                <li class="copy-many-leads-modal__option" id="option-selectable" data-id="{{ user.id }}">
+                  <input type="radio" name="_manager-{{ user.id }}" />
+                  <label for="manager-{{ user.id }}">{{ user.title }}</label>
+                </li>
+              {% endfor %}
+            </ul>
+            <div class="copy-many-leads-modal__selected">
+              <span>Not selected</span>
+              <input 
+                type="text" 
+                name="manager-select-box" 
+                value="" 
+                style="display: none"
+                id="modal-form-input"
+              />
+            </div>
+            <div class="copy-many-leads-modal__search-box">
+              <input type="text" name="options_search_box" placeholder="Search...">
+            </div>
+          </div>
+          {# Checkbox #}
+          <div class="copy-many-leads-modal__user-option-container">
+            <div for="should-keep-user" class="copy-many-leads-modal__checkbox">
+              <span class="copy-many-leads-modal__checkmark"></span>
+              <span class="copy-many-leads-modal__checkbox-label">Keep current manager</span>
+            </div>
+            {# Blah blah blah #}
+          </div>
+        </div>
+        <div class="copy-many-leads-modal__form-group" id="__status-form-group">
+          <label class="copy-many-leads-modal__form-group-label" for="pipeline">Funnel and stage<span class="copy-many-leads-modal__error">Not selected</span></label>
+          <div class="copy-many-leads-modal__select-box" id="status-select-box">
+            <ul class="copy-many-leads-modal__options-container">
+              {% for pipeline in pipelines %}
+                <li class="copy-many-leads-modal__option copy-many-leads-modal__option-heading">{{ pipeline.name }}</li>
+                {% for pipelineStatus in pipeline._embedded.statuses %}
+                  {% if pipelineStatus.type == 0 %}
+                    <li 
+                      class="copy-many-leads-modal__option" 
+                      id="option-selectable" 
+                      data-id="{{ pipelineStatus.id }}"
+                      style="background-color: {{ pipelineStatus.color }} !important;"
+                    >
+                      <input type="radio" name="_manager-{{ pipelineStatus.id }}" />
+                      <label for="manager-{{ pipelineStatus.id }}">{{ pipelineStatus.name }}</label>
+                    </li>
+                  {% endif %}
+                {% endfor %}
+              {% endfor %}
+            </ul>
+            <div class="copy-many-leads-modal__selected">
+              <span>Not selected</span>
+              <input 
+                type="text" 
+                name="status-select-box" 
+                value="" 
+                style="display: none"
+                id="modal-form-input"
+              />
+            </div>
+            <div class="copy-many-leads-modal__search-box">
+              <input type="text" name="options_search_box" placeholder="Search...">
+            </div>
+          </div>
+        </div>
+        <div class="copy-many-leads-modal__form-group" id="__prefix-form-group">
+          <label class="copy-many-leads-modal__form-group-label" for="prefix-input">Prefix <span class="copy-many-leads-modal__error">Prefix not added</span></label>
+          <div class="form-group__prefix-container">
+            <div class="form-group__input-container">
+              <input placeholder="Prefix" name="prefix-input" type="text" id="modal-form-input" />
+            </div>
+            <div class="form-group__info-btn" id="__prefix-info-btn">
+              <p>?</p>
+            </div>
+          </div>
+        </div>
+        <div class="copy-many-leads-modal__form-group" id="__tags-form-group">
+          <label class="copy-many-leads-modal__form-group-label" for="tags">Tags</label>
+          <div class="form-group__tag-container">
+            <div class="form-group__input-container">
+              <input placeholder="#tag" name="tags" type="text" id="tags" />
+            </div>
+            <div class="form-group__info-btn" id="__tag-info-btn">
+              <p>?</p>
+            </div>
+          </div>
+          <div class="copy-many-leads-modal__tags">
+            {# <div class="copy-many-leads-modal__tag" data-value="">#Tag 1</div> #}
+          </div>
+        </div>
+        <button type="submit" class="copy-many-leads-modal__button">
+          <span class="copy-many-leads-modal__button-text">Create</span>
+        </button>
+      </form>
+    </div>
+  </div>
+  {# Tooltip goes here #}
+  <div class="copy-many-leads-modal__tooltip"></div>
+</div>

@@ -1,0 +1,36 @@
+###
+# POST
+###
+POST https://localproduct.local.dv/scripts/form.php
+Content-Type: application/json
+
+{
+  "phone":"+74242424245",
+  "name":"3stanislawww",
+  "email":"3stanislaw@log.ru",
+  "linkPage":"Ссылка на страницу отправки формы",
+  "title":"Название формы",
+  "utm_source":"Данные маркетинга",
+  "utm_medium":"Данные маркетинга",
+  "utm_campaign":"Данные маркетинга",
+  "utm_content":"Данные маркетинга",
+  "utm_term":"Данные маркетинга",
+  "payment":"Вариант оплаты",
+  "delivery":"Способ доставки",
+  "address":"Адрес доставки",
+  "company":"Название компании",
+  "product":"Товары",
+  "file":"Ccылка на Файл",
+  "text":"Комментарий"
+}
+
+
+###
+# GET
+###
+GET https://localproduct.local.dv/scripts/form.php?id=99
+Accept: application/json
+
+###
+
+
