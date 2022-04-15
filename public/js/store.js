@@ -199,8 +199,12 @@ massCreateLeads.createActiveFilterLeadsRequestUrl = () => {
             requestQuery += `filter[custom_fields_values][${fieldID}][0]=${filterKeyValuePair[1]}&`;
         }
       } else if (filterKeyValuePair[0] === 'filter_date_to') {
-        if (filterValues[i - 1][0] === 'filter_date_from') {
+        if (
+          filterValues[i - 1][0] !== undefined &&
+          filterValues[i - 1][0] === 'filter_date_from'
+        ) {
           if (
+            filterValues[i + 1] !== undefined &&
             filterValues[i + 1][0] === 'filter_date_switch' &&
             filterValues[i + 1][1] === 'created'
           )
@@ -210,6 +214,7 @@ massCreateLeads.createActiveFilterLeadsRequestUrl = () => {
               massCreateLeads.getNextDateString(filterKeyValuePair[1])
             }&`;
           else if (
+            filterValues[i + 1] !== undefined &&
             filterValues[i + 1][0] === 'filter_date_switch' &&
             filterValues[i + 1][1] === 'closed'
           )
@@ -219,7 +224,9 @@ massCreateLeads.createActiveFilterLeadsRequestUrl = () => {
               massCreateLeads.getNextDateString(filterKeyValuePair[1])
             }&`;
           else if (
+            filterValues[i - 1] !== undefined &&
             filterValues[i + 1][0] !== 'filter_date_switch' &&
+            filterValues[i - 2] !== undefined &&
             filterValues[i - 2][0] !== 'filter_date_switch'
           )
             requestQuery += `filter[created_at][from]=${
@@ -230,7 +237,9 @@ massCreateLeads.createActiveFilterLeadsRequestUrl = () => {
         }
       } else if (filterKeyValuePair[0] === 'filter_date_switch') {
         if (
+          filterValues[i + 1] !== undefined &&
           filterValues[i + 1][0] === 'filter_date_from' &&
+          filterValues[i + 2] !== undefined &&
           filterValues[i + 2][0] === 'filter_date_to' &&
           filterKeyValuePair[1] === 'closed'
         )
@@ -241,6 +250,7 @@ massCreateLeads.createActiveFilterLeadsRequestUrl = () => {
           }&`;
       } else if (filterKeyValuePair[0] === 'filter[date_preset]') {
         if (
+          filterValues[i + 1][0] !== undefined &&
           filterValues[i + 1][0] === 'filter_date_switch' &&
           filterValues[i + 1][1] === 'created'
         ) {
@@ -521,7 +531,7 @@ massCreateLeads.getAndValidateFormData = async (leadsData) => {
         tags
       )
 
-      let fieldDataArray = massCreateLeads.prepareRequestData(
+      let fieldDataArray = await massCreateLeads.prepareRequestData(
         massCreateLeads.leadsMatch,
         leadsDataChunk
       );
@@ -636,7 +646,7 @@ massCreateLeads.postManyLeads = async (
 /**
  *  Функция подготовки данных полей к PATCH-запросу
  */
-massCreateLeads.prepareRequestData = () => {
+massCreateLeads.prepareRequestData = async () => {
   let filteredCustomFieldValues = [],
     dataArray = [];
 
@@ -685,6 +695,8 @@ massCreateLeads.prepareRequestData = () => {
         custom_fields_values: filteredCustomFieldValues,
       });
     } else break
+
+    filteredCustomFieldValues = []
   }
 
   console.log(dataArray);
