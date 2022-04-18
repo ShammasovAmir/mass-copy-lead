@@ -531,13 +531,15 @@ massCreateLeads.getAndValidateFormData = async (leadsData) => {
         tags
       )
 
-      let fieldDataArray = await massCreateLeads.prepareRequestData(
-        massCreateLeads.leadsMatch,
-        leadsDataChunk
-      );
+      let fieldDataArray = await massCreateLeads.prepareRequestData();
 
-      if (fieldDataArray.length > 0)
-        await massCreateLeads.addCustomFields(fieldDataArray);
+      console.log('᚛ᚌᚔᚚ ᚓ ᚈᚔᚄᚓᚇ')
+      console.log('Data Array:', fieldDataArray)
+
+      await (async () => {
+        await massCreateLeads.addCustomFields(fieldDataArray)
+        massCreateLeads.leadsMatch = []
+      })();
     }
 
     await (async () => {
@@ -635,8 +637,7 @@ massCreateLeads.postManyLeads = async (
 
     console.log('========== 1!')
 
-    await setTimeout(() => {
-    }, 300)
+    await setTimeout(() => null, 300)
     return data;
   } catch (error) {
     console.error('===== ERROR while trying to post leads: ', error);
@@ -694,9 +695,8 @@ massCreateLeads.prepareRequestData = async () => {
         id: massCreateLeads.leadsMatch[i].newLeadID,
         custom_fields_values: filteredCustomFieldValues,
       });
+      console.log(`Lead ${i}: `, filteredCustomFieldValues)
     } else break
-
-    filteredCustomFieldValues = []
   }
 
   console.log(dataArray);
@@ -709,6 +709,7 @@ massCreateLeads.prepareRequestData = async () => {
  */
 massCreateLeads.addCustomFields = async (fieldDataArray) => {
   if (fieldDataArray.length > 0) {
+    console.log('Not empty!')
     try {
       let response = await fetch('/api/v4/leads', {
         headers: {
@@ -725,5 +726,5 @@ massCreateLeads.addCustomFields = async (fieldDataArray) => {
     } catch (error) {
       console.error('===== ERROR while trying to patch leads: ', error);
     }
-  }
+  } else console.log('Empty')
 };
