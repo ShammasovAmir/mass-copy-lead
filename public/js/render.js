@@ -11,8 +11,6 @@ massCreateLeads.prerender = () => {
  *  Добавление всплывающего окна
  */
 massCreateLeads.renderPopup = (users, pipelines) => {
-  console.log(users);
-  console.log(pipelines);
   massCreateLeads.widget.render({
     // href: '/view/popup.twig', // PRODUCTION
     href: '/widget/view/popup.twig', // DEVELOPMENT

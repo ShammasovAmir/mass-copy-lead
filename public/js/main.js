@@ -13,9 +13,13 @@ window.massCreateLeads['init'].push(function (widget) {
     if (massCreateLeads.selectedLeadsIDs.length > 0) {
       // Получить и отфильтровать встроенную константу менеджеров
       massCreateLeads.users = await massCreateLeads.filterUsersConstant();
+      console.log('All Users');
+      console.log(massCreateLeads.users);
 
       // Получить воронки
       massCreateLeads.pipelines = await massCreateLeads.getPipelines();
+      console.log('Pipelines:');
+      console.log(massCreateLeads.pipelines);
 
       let leadsPerPage = parseInt(
         $('.control--select--input.js-pagination-rows-input').val()
@@ -29,14 +33,9 @@ window.massCreateLeads['init'].push(function (widget) {
         massCreateLeads.selectedLeads = await massCreateLeads.getManyLeadsByIDs(
           massCreateLeads.selectedLeadsIDs
         );
-
+        console.log('Selected LEads:');
         console.log(massCreateLeads.selectedLeads);
 
-        // massCreateLeads.addFormModalAndItsEvents(
-        //   users,
-        //   pipelines,
-        //   massCreateLeads.selectedLeads
-        // );
         massCreateLeads.renderPopup(
           massCreateLeads.users,
           massCreateLeads.pipelines

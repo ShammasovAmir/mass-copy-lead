@@ -78,7 +78,6 @@ massCreateLeads.getPipelines = async () => {
     data._embedded.pipelines.forEach((pipeline) =>
       !pipeline.is_archive ? pipelines.push(pipeline) : null
     );
-    console.log('After: ', pipelines);
     return pipelines;
   } catch (error) {
     console.error('===== ERROR in pipelines: ', error);
@@ -459,13 +458,14 @@ massCreateLeads.removeNotification = () => {
  *  Функция валидации и получения данных с формы
  */
 massCreateLeads.getAndValidateFormData = async (leadsData) => {
+
+  console.log('leadsData2344234')
+  console.log(leadsData)
+
+
   let managerName, statusID, leadName, tags;
   // Check if the checkbox is selected and if no get the manager data from input
-  if (
-    $(
-      '.copy-many-leads-modal__checkbox.copy-many-leads-modal__checkbox--active'
-    ).length
-  )
+  if ($('.copy-many-leads-modal__checkbox.copy-many-leads-modal__checkbox--active').length)
     managerName = '~%current%manager%~';
   else {
     managerName = $('input[name="manager-select-box"]').val();
@@ -520,6 +520,7 @@ massCreateLeads.getAndValidateFormData = async (leadsData) => {
 
     massCreateLeads.leadsMatch = []
 
+    /*This Errors*/
     for (let i = 0; i < leadsData.length; i += 40) {
       const leadsDataChunk = leadsData.slice(i, i + 40);
 
@@ -530,10 +531,12 @@ massCreateLeads.getAndValidateFormData = async (leadsData) => {
         leadName,
         tags
       )
+      console.log('massCreateLeads.leadsMatch')
+      console.log(massCreateLeads.leadsMatch)
+
 
       let fieldDataArray = await massCreateLeads.prepareRequestData();
 
-      console.log('᚛ᚌᚔᚚ ᚓ ᚈᚔᚄᚓᚇ')
       console.log('Data Array:', fieldDataArray)
 
       await (async () => {
@@ -595,7 +598,8 @@ massCreateLeads.prepareLeadsData = (
     };
     preparedLeadsData.push(preparedLeadData);
   }
-  console.log('Prepared data! ', preparedLeadsData);
+  console.log('Prepared data!');
+  console.log(preparedLeadsData);
   return preparedLeadsData;
 };
 
@@ -626,7 +630,6 @@ massCreateLeads.postManyLeads = async (
       body: JSON.stringify(filteredLeadsData),
     });
     let data = await response.json();
-    console.log('Posted data: ', data);
 
     data.forEach((createdLeadData, i) => massCreateLeads.leadsMatch.push({
       newLeadID: createdLeadData.id,
@@ -648,11 +651,10 @@ massCreateLeads.postManyLeads = async (
  *  Функция подготовки данных полей к PATCH-запросу
  */
 massCreateLeads.prepareRequestData = async () => {
-  let filteredCustomFieldValues = [],
-    dataArray = [];
+  let dataArray = [];
 
   for (let i = 0; i < massCreateLeads.leadsMatch.length; i++) {
-    console.log(massCreateLeads.leadsMatch[i].leadData)
+    let filteredCustomFieldValues = [];
 
     if (
       massCreateLeads.leadsMatch[i].leadData !== null &&
@@ -670,25 +672,45 @@ massCreateLeads.prepareRequestData = async () => {
           filteredCustomFieldValue,
           filteredCustomFieldValuesArray = [];
 
-        for (let i = 0; i < unfilteredCustomFieldValuesArray.length; i++) {
-          let unfilteredCustomFieldValuesArrayElement = {
-            value: unfilteredCustomFieldValuesArray[i].value,
-          };
+        if (
+          unfilteredCustomFieldValues[i].field_type == 'text' ||
+          unfilteredCustomFieldValues[i].field_type == 'numeric' ||
+          unfilteredCustomFieldValues[i].field_type == 'checkbox' ||
+          unfilteredCustomFieldValues[i].field_type == 'select' ||
+          unfilteredCustomFieldValues[i].field_type == 'multiselect' ||
+          unfilteredCustomFieldValues[i].field_type == 'date' ||
+          unfilteredCustomFieldValues[i].field_type == 'url' ||
+          unfilteredCustomFieldValues[i].field_type == 'textarea' ||
+          unfilteredCustomFieldValues[i].field_type == 'radiobutton' ||
+          unfilteredCustomFieldValues[i].field_type == 'category' ||
+          unfilteredCustomFieldValues[i].field_type == 'birthday' ||
+          unfilteredCustomFieldValues[i].field_type == 'date_time' ||
+          unfilteredCustomFieldValues[i].field_type == 'price'
+        ) {
+          for (let i = 0; i < unfilteredCustomFieldValuesArray.length; i++) {
+            let unfilteredCustomFieldValuesArrayElement = {
+              value: unfilteredCustomFieldValuesArray[i].value,
+            };
 
-          filteredCustomFieldValuesArray.push(
-            unfilteredCustomFieldValuesArrayElement
-          );
+            filteredCustomFieldValuesArray.push(
+              unfilteredCustomFieldValuesArrayElement
+            );
+          }
+
+          if (filteredCustomFieldValuesArray.length > 0) {
+            filteredCustomFieldValue = {
+              field_code: unfilteredCustomFieldValues[i].field_code,
+              field_id: unfilteredCustomFieldValues[i].field_id,
+              field_name: unfilteredCustomFieldValues[i].field_name,
+              field_type: unfilteredCustomFieldValues[i].field_type,
+              values: filteredCustomFieldValuesArray,
+            };
+
+            console.log('=====filteredCustomFieldValue:', filteredCustomFieldValue)
+
+            filteredCustomFieldValues.push(filteredCustomFieldValue);
+          }
         }
-
-        filteredCustomFieldValue = {
-          field_code: unfilteredCustomFieldValues[i].field_code,
-          field_id: unfilteredCustomFieldValues[i].field_id,
-          field_name: unfilteredCustomFieldValues[i].field_name,
-          field_type: unfilteredCustomFieldValues[i].field_type,
-          values: filteredCustomFieldValuesArray,
-        };
-
-        filteredCustomFieldValues.push(filteredCustomFieldValue);
       }
 
       dataArray.push({
@@ -699,7 +721,7 @@ massCreateLeads.prepareRequestData = async () => {
     } else break
   }
 
-  console.log(dataArray);
+  console.log('=========dataArray', dataArray);
 
   return dataArray;
 };
