@@ -36,8 +36,6 @@
 
 Хосты
 -----------
-Сгенерировать сертификат по гайду
-
-[Проект прокси](https://gitlab.com/ingrup_products/proxy/-/blob/master/README.md)
+Сгенерировать сертификат
 
     127.0.0.1 localproduct.local.dv
